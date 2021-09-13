@@ -5,11 +5,6 @@
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/sheet/XSpreadsheetView.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -17,14 +12,11 @@
 
 using namespace com::sun::star::awt;
 using namespace com::sun::star::frame;
-using namespace com::sun::star::system;
 using namespace com::sun::star::text;
 using namespace com::sun::star::uno;
 
 using com::sun::star::beans::NamedValue;
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::sheet::XSpreadsheetView;
-using com::sun::star::text::XTextViewCursorSupplier;
 using com::sun::star::util::URL;
 using ::rtl::OUString;
 
@@ -231,6 +223,9 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             config.setMaxNumOfLetters(value);
         } else if (aURL.Path == "GenerateText") {
             rtl::OUString alphabet;
+            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
+            Reference <XText> text = text_document->getText();
+            Reference <XTextRange> textEnd = text->getEnd();
             if (config.getAlphabet() == Latin) {
                 alphabet = "Latin";
             } else if (config.getAlphabet() == Cyrillic) {
@@ -238,12 +233,8 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             } else if (config.getAlphabet() == Mixed) {
                 alphabet = "Mixed";
             }
-            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
-            Reference <XText> text = text_document->getText();
-            Reference <XTextRange> textEnd = text->getEnd();
-            textEnd->setString(aURL.Path + ": " + alphabet  +
-            rtl::OUString::createFromAscii((std::to_string(config.getNumberOfWords())).c_str())  + " " +
-            rtl::OUString::createFromAscii((std::to_string(config.getMaxNumOfLetters())).c_str()) +"\n");
+            std::string newText = generateText(config);
+            textEnd -> setString(::rtl::OUString::createFromAscii(newText.c_str()));
         }
     }
 }

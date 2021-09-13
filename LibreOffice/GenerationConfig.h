@@ -20,9 +20,10 @@ public:
     int getMaxNumOfLetters() { return maxNumOfLetters; }
 
     void setAlphabet(AlphabetType alpha) { alphabet = alpha; }
-    int getAlphabet() { return alphabet; }
+    AlphabetType getAlphabet() { return alphabet; }
 };
 
 std::string generateText(GenerationConfig config);
+std::string generateWord(AlphabetType alphabet, int length);
 
 #endif //SASVK4_GENERATIONCONFIG_H
