@@ -9,6 +9,7 @@
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include "GenerationConfig.h"
 
 #define MYPROTOCOLHANDLER_IMPLEMENTATIONNAME   "com.asvk.samuil.app.Impl.ProtocolHandler"
 #define MYPROTOCOLHANDLER_SERVICENAME          "com.asvk.samuil.app.ProtocolHandler"
@@ -82,6 +83,8 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit2 > mxToolkit;
 
 public:
+    GenerationConfig config;
+
     BaseDispatch( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const ::rtl::OUString& rServiceName );
 

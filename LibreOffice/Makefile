@@ -19,7 +19,8 @@ REGISTERFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_register_component.flag
 
 CXXFILES =	MyProtocolHandler.cxx \
 			ListenerHelper.cxx \
-			exports.cxx
+			exports.cxx \
+			GenerationConfig.cxx
 
 SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 

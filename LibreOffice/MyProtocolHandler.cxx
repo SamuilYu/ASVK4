@@ -1,23 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
- * This file is part of the LibreOffice project.
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * This file incorporates work covered by the following license notice:
- *
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements. See the NOTICE file distributed
- *   with this work for additional information regarding copyright
- *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
- *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
-
-
 #include "ListenerHelper.h"
 #include "MyProtocolHandler.h"
 
@@ -214,9 +194,29 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
                     lArgs[i].Value >>= alphabet;
                 }
             }
+            if (alphabet == "Latin") {
+                config.setAlphabet(Latin);
+            } else if (alphabet == "Cyrillic") {
+                config.setAlphabet(Cyrillic);
+            } else if (alphabet == "Mixed") {
+                config.setAlphabet(Mixed);
+            }
             textEnd->setString(aURL.Path + ": " + alphabet + "\n");
         }
-        else if ( aURL.Path == "WordCount" || aURL.Path == "WordLength")
+        else if ( aURL.Path == "WordCount"){
+            int value;
+            for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ ) {
+                if (lArgs[i].Name == "Value") {
+                    lArgs[i].Value >>= value;
+                }
+            }
+            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
+            Reference <XText> text = text_document->getText();
+            Reference <XTextRange> textEnd = text->getEnd();
+            textEnd->setString(aURL.Path + ": " + "Value: " + rtl::OUString::createFromAscii((std::to_string(value + 1)).c_str())  + "\n");
+            config.setNumberOfWords(value);
+        }
+        else if (aURL.Path == "WordLength")
         {
             int value;
             for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ ) {
@@ -228,6 +228,22 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             Reference <XText> text = text_document->getText();
             Reference <XTextRange> textEnd = text->getEnd();
             textEnd->setString(aURL.Path + ": " + "Value: " + rtl::OUString::createFromAscii((std::to_string(value + 1)).c_str())  + "\n");
+            config.setMaxNumOfLetters(value);
+        } else if (aURL.Path == "GenerateText") {
+            rtl::OUString alphabet;
+            if (config.getAlphabet() == Latin) {
+                alphabet = "Latin";
+            } else if (config.getAlphabet() == Cyrillic) {
+                alphabet = "Cyrillic";
+            } else if (config.getAlphabet() == Mixed) {
+                alphabet = "Mixed";
+            }
+            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
+            Reference <XText> text = text_document->getText();
+            Reference <XTextRange> textEnd = text->getEnd();
+            textEnd->setString(aURL.Path + ": " + alphabet  +
+            rtl::OUString::createFromAscii((std::to_string(config.getNumberOfWords())).c_str())  + " " +
+            rtl::OUString::createFromAscii((std::to_string(config.getMaxNumOfLetters())).c_str()) +"\n");
         }
     }
 }
