@@ -5,6 +5,9 @@
 #include <utility>
 #include <stdexcept>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+
+using namespace com::sun::star::uno;
 
 enum AlphabetType {Latin, Cyrillic, Mixed};
 
@@ -26,5 +29,6 @@ public:
 
 ::rtl::OUString generateText(GenerationConfig config);
 ::rtl::OUString generateWord(AlphabetType alphabet, int length);
+void newDocumentAndGenerateText(Reference<XComponentContext> xContext, GenerationConfig config);
 
 #endif //SASVK4_GENERATIONCONFIG_H

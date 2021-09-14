@@ -211,11 +211,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             config.setMaxNumOfLetters(value);
         } else if (aURL.Path == "GenerateText")
             if (config.getMaxNumOfLetters() != 0 && config.getNumberOfWords() != 0) {
-                Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
-                Reference <XText> text = text_document->getText();
-                Reference <XTextRange> textEnd = text->getEnd();
-                rtl::OUString newText = generateText(config);
-                textEnd -> setString(newText);
+                newDocumentAndGenerateText(mxContext, config);
             }
         }
 }
