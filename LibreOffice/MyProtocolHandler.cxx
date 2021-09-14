@@ -177,9 +177,6 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
     {
         if (aURL.Path == "Alphabet")
         {
-            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
-            Reference <XText> text = text_document->getText();
-            Reference <XTextRange> textEnd = text->getEnd();
             rtl::OUString alphabet;
             for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ ) {
                 if (lArgs[i].Name == "Text") {
@@ -193,7 +190,6 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             } else if (alphabet == "Mixed") {
                 config.setAlphabet(Mixed);
             }
-            textEnd->setString(aURL.Path + ": " + alphabet + "\n");
         }
         else if ( aURL.Path == "WordCount"){
             int value;
@@ -202,10 +198,6 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
                     lArgs[i].Value >>= value;
                 }
             }
-            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
-            Reference <XText> text = text_document->getText();
-            Reference <XTextRange> textEnd = text->getEnd();
-            textEnd->setString(aURL.Path + ": " + "Value: " + rtl::OUString::createFromAscii((std::to_string(value + 1)).c_str())  + "\n");
             config.setNumberOfWords(value);
         }
         else if (aURL.Path == "WordLength")
@@ -216,27 +208,16 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
                     lArgs[i].Value >>= value;
                 }
             }
-            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
-            Reference <XText> text = text_document->getText();
-            Reference <XTextRange> textEnd = text->getEnd();
-            textEnd->setString(aURL.Path + ": " + "Value: " + rtl::OUString::createFromAscii((std::to_string(value + 1)).c_str())  + "\n");
             config.setMaxNumOfLetters(value);
-        } else if (aURL.Path == "GenerateText") {
-            rtl::OUString alphabet;
-            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
-            Reference <XText> text = text_document->getText();
-            Reference <XTextRange> textEnd = text->getEnd();
-            if (config.getAlphabet() == Latin) {
-                alphabet = "Latin";
-            } else if (config.getAlphabet() == Cyrillic) {
-                alphabet = "Cyrillic";
-            } else if (config.getAlphabet() == Mixed) {
-                alphabet = "Mixed";
+        } else if (aURL.Path == "GenerateText")
+            if (config.getMaxNumOfLetters() != 0 && config.getNumberOfWords() != 0) {
+                Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
+                Reference <XText> text = text_document->getText();
+                Reference <XTextRange> textEnd = text->getEnd();
+                rtl::OUString newText = generateText(config);
+                textEnd -> setString(newText);
             }
-            std::string newText = generateText(config);
-            textEnd -> setString(::rtl::OUString::createFromAscii(newText.c_str()));
         }
-    }
 }
 
 void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )

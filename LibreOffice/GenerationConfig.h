@@ -4,6 +4,7 @@
 #include <map>
 #include <utility>
 #include <stdexcept>
+#include <rtl/ustring.hxx>
 
 enum AlphabetType {Latin, Cyrillic, Mixed};
 
@@ -23,7 +24,7 @@ public:
     AlphabetType getAlphabet() { return alphabet; }
 };
 
-std::string generateText(GenerationConfig config);
-std::string generateWord(AlphabetType alphabet, int length);
+::rtl::OUString generateText(GenerationConfig config);
+::rtl::OUString generateWord(AlphabetType alphabet, int length);
 
 #endif //SASVK4_GENERATIONCONFIG_H
