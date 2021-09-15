@@ -108,7 +108,7 @@ void createStatisticsTable(Reference<XTextDocument> text_document) {
     text->insertTextContent(text_range, text_content, (unsigned char) 0);
 
     fillTable(table, stat);
-};
+}
 
 Reference <XTextTable> createTable(Reference<XTextDocument> text_document, int num_of_row, int num_of_col) {
     Reference <XMultiServiceFactory> document(text_document, UNO_QUERY);
@@ -201,14 +201,23 @@ bool hasNoLetters(rtl::OUString word) {
 }
 
 void highlight(Reference<XTextDocument> text_document) {
+    bool hasTable = false;
     Reference <XText> text = text_document->getText();
     int size = (text -> getString()).getLength();
     Reference <XTextCursor> cursor = text -> createTextCursor();
     int i = 0;
     while (true) {
+        hasTable = false;
+        rtl::OUString previousString;
         while(hasOnlyLetters(cursor -> getString()) && i < size) {
+            previousString = cursor -> getString();
             cursor -> goRight(1, true);
+            rtl::OUString newString = cursor -> getString();
             i++;
+            if (newString.getLength() != (previousString.getLength() + 1)) {
+                hasTable = true;
+                break;
+            }
         }
         if (i < size) {
             cursor -> goLeft(1, true);
@@ -219,16 +228,33 @@ void highlight(Reference<XTextDocument> text_document) {
             properties -> setPropertyValue("CharColor", makeAny(255 * 65536));
         }
         cursor -> collapseToEnd();
-        while (hasNoLetters(cursor -> getString()) && i < size) {
+        if (hasTable) {
             cursor -> goRight(1, true);
+            i += (cursor -> getString()).getLength();
+            cursor -> collapseToEnd();
+            continue;
+        }
+        while (hasNoLetters(cursor -> getString()) && i < size) {
+            previousString = cursor -> getString();
+            cursor -> goRight(1, true);
+            rtl::OUString newString = cursor -> getString();
             i++;
+            if (newString.getLength() != (previousString.getLength() + 1)) {
+                hasTable = true;
+                break;
+            }
         }
         if (i < size) {
             cursor -> goLeft(1, true);
             i--;
         }
         cursor -> collapseToEnd();
-
+        if (hasTable) {
+            cursor -> goRight(1, true);
+            i += (cursor -> getString()).getLength();
+            cursor -> collapseToEnd();
+            continue;
+        }
         if(i >= size)
             break;
     }
