@@ -39,4 +39,6 @@ void createStatisticsTable(Reference<XTextDocument> text_document);
 Reference <XTextTable> createTable(Reference<XTextDocument> text_document, int num_of_row, int num_of_col);
 void fillTable(Reference <XTextTable> table, std::map<int, int> stat);
 
+void highlight(Reference<XTextDocument> document);
+
 #endif //SASVK4_GENERATIONCONFIG_H

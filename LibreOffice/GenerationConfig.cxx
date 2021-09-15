@@ -2,6 +2,10 @@
 #include <cstdlib>
 #include <ctime>
 
+#include <sal/types.h>
+
+#include <cppuhelper/queryinterface.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
@@ -137,6 +141,96 @@ void fillTable(Reference <XTextTable> table, std::map<int, int> stat) {
             cell_text -> setString(cellVal);
             y++;
         }
+    }
+}
+
+bool hasMixedLetters(rtl::OUString word) {
+    bool hasLatin = false;
+    bool hasCyrillic = false;
+    if (word.getLength() == 0)
+        return false;
+    for (int i = 0; i < word.getLength(); i++) {
+        for(auto letter: myAlphabets[Latin])
+            if (word[i] == letter) {
+                hasLatin = true;
+                break;
+            }
+        for(auto letter: myAlphabets[Cyrillic])
+            if (word[i] == letter) {
+                hasCyrillic = true;
+                break;
+            }
+        if (hasCyrillic && hasLatin)
+            return true;
+    }
+    return false;
+}
+
+bool hasOnlyLetters(rtl::OUString word) {
+    bool isLetter = false;
+    if (word.getLength() == 0)
+        return true;
+    for (int i = 0; i < word.getLength(); i++) {
+        for(auto letter: myAlphabets[Mixed])
+            if (word[i] == letter) {
+                isLetter = true;
+                break;
+            }
+        if (!isLetter)
+            return false;
+        isLetter = false;
+    }
+    return true;
+}
+
+bool hasNoLetters(rtl::OUString word) {
+    bool isLetter = false;
+    if (word.getLength() == 0)
+        return true;
+    for (int i = 0; i < word.getLength(); i++) {
+        for(auto letter: myAlphabets[Mixed])
+            if (word[i] == letter) {
+                isLetter = true;
+                break;
+            }
+        if (isLetter)
+            return false;
+        isLetter = false;
+    }
+    return true;
+}
+
+void highlight(Reference<XTextDocument> text_document) {
+    Reference <XText> text = text_document->getText();
+    int size = (text -> getString()).getLength();
+    Reference <XTextCursor> cursor = text -> createTextCursor();
+    int i = 0;
+    while (true) {
+        while(hasOnlyLetters(cursor -> getString()) && i < size) {
+            cursor -> goRight(1, true);
+            i++;
+        }
+        if (i < size) {
+            cursor -> goLeft(1, true);
+            i--;
+        }
+        if (hasMixedLetters(cursor -> getString())) {
+            Reference <XPropertySet> properties(cursor, UNO_QUERY);
+            properties -> setPropertyValue("CharColor", makeAny(255 * 65536));
+        }
+        cursor -> collapseToEnd();
+        while (hasNoLetters(cursor -> getString()) && i < size) {
+            cursor -> goRight(1, true);
+            i++;
+        }
+        if (i < size) {
+            cursor -> goLeft(1, true);
+            i--;
+        }
+        cursor -> collapseToEnd();
+
+        if(i >= size)
+            break;
     }
 }
 

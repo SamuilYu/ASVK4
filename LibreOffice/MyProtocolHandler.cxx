@@ -104,7 +104,8 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
              aURL.Path == "WordLength" ||
              aURL.Path == "Alphabet" ||
              aURL.Path == "GenerateText" ||
-             aURL.Path == "Statistics")
+             aURL.Path == "Statistics" ||
+             aURL.Path == "Highlight")
         {
             xRet = aListenerHelper.GetDispatch( mxFrame, aURL.Path );
             if ( !xRet.is() )
@@ -212,6 +213,9 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         } else if (aURL.Path == "Statistics") {
             Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
             createStatisticsTable(text_document);
+        } else if (aURL.Path == "Highlight") {
+            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
+            highlight(text_document);
         }
     }
 }
