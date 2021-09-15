@@ -207,8 +207,10 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             }
             config.setMaxNumOfLetters(value);
         } else if (aURL.Path == "GenerateText") {
-            if (config.getMaxNumOfLetters() != 0 && config.getNumberOfWords() != 0) {
+            if (config.getMaxNumOfLetters() > 0 && config.getNumberOfWords() > 0) {
                 newDocumentAndGenerateText(mxContext, config);
+            } else {
+                ShowMessageBox(mxFrame, rtl::OUString("Error"), rtl::OUString("Cannot generate text with these parameters."));
             }
         } else if (aURL.Path == "Statistics") {
             Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
