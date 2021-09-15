@@ -30,5 +30,6 @@ public:
 ::rtl::OUString generateText(GenerationConfig config);
 ::rtl::OUString generateWord(AlphabetType alphabet, int length);
 void newDocumentAndGenerateText(Reference<XComponentContext> xContext, GenerationConfig config);
+std::map<int, int> collectStatistics(rtl::OUString text);
 
 #endif //SASVK4_GENERATIONCONFIG_H

@@ -103,7 +103,8 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
         if ( aURL.Path == "WordCount" ||
              aURL.Path == "WordLength" ||
              aURL.Path == "Alphabet" ||
-             aURL.Path == "GenerateText")
+             aURL.Path == "GenerateText" ||
+             aURL.Path == "Statistics")
         {
             xRet = aListenerHelper.GetDispatch( mxFrame, aURL.Path );
             if ( !xRet.is() )
@@ -173,12 +174,10 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
      */
     Reference< XInterface > xSelfHold(static_cast< XDispatch* >(this), UNO_QUERY);
 
-    if ( aURL.Protocol == "com.asvk.samuil.app:" )
-    {
-        if (aURL.Path == "Alphabet")
-        {
+    if ( aURL.Protocol == "com.asvk.samuil.app:" ) {
+        if (aURL.Path == "Alphabet") {
             rtl::OUString alphabet;
-            for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ ) {
+            for (sal_Int32 i = 0; i < lArgs.getLength(); i++) {
                 if (lArgs[i].Name == "Text") {
                     lArgs[i].Value >>= alphabet;
                 }
@@ -190,30 +189,40 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             } else if (alphabet == "Mixed") {
                 config.setAlphabet(Mixed);
             }
-        }
-        else if ( aURL.Path == "WordCount"){
+        } else if (aURL.Path == "WordCount") {
             int value;
-            for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ ) {
+            for (sal_Int32 i = 0; i < lArgs.getLength(); i++) {
                 if (lArgs[i].Name == "Value") {
                     lArgs[i].Value >>= value;
                 }
             }
             config.setNumberOfWords(value);
-        }
-        else if (aURL.Path == "WordLength")
-        {
+        } else if (aURL.Path == "WordLength") {
             int value;
-            for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ ) {
+            for (sal_Int32 i = 0; i < lArgs.getLength(); i++) {
                 if (lArgs[i].Name == "Value") {
                     lArgs[i].Value >>= value;
                 }
             }
             config.setMaxNumOfLetters(value);
-        } else if (aURL.Path == "GenerateText")
+        } else if (aURL.Path == "GenerateText") {
             if (config.getMaxNumOfLetters() != 0 && config.getNumberOfWords() != 0) {
                 newDocumentAndGenerateText(mxContext, config);
             }
+        } else if (aURL.Path == "Statistics") {
+            Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
+            Reference <XText> text = text_document->getText();
+            Reference <XTextRange> textEnd = text->getEnd();
+            rtl::OUString textString = text -> getString();
+            rtl::OUString output = "";
+            auto stat = collectStatistics(textString);
+            for (auto pair: stat) {
+                output = output + rtl::OUString::createFromAscii(std::to_string(pair.first).c_str()) + " " +
+                        rtl::OUString::createFromAscii(std::to_string(pair.second).c_str()) + "\n";
+            }
+            textEnd -> setString(output);
         }
+    }
 }
 
 void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )

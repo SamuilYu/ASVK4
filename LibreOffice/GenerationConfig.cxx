@@ -55,6 +55,35 @@ void newDocumentAndGenerateText(Reference<XComponentContext> xContext, Generatio
     Reference <XText> text = text_document->getText();
     Reference <XTextRange> textEnd = text->getEnd();
     rtl::OUString newText = generateText(config);
-    textEnd -> setString(newText);
+    textEnd -> setString(newText+"\n");
 }
+
+std::map<int, int> collectStatistics(rtl::OUString text) {
+    int i = 0;
+    int size = 0;
+    std::map<int, int> res;
+    while (i < text.getLength()) {
+        if (myAlphabets[Mixed].find(text[i]) != -1) {
+            size++;
+        } else if (size != 0) {
+            if (res.find(size) != res.end()) {
+                res[size]++;
+            } else {
+                res[size] = 1;
+            }
+            size = 0;
+        }
+        i++;
+    }
+    if (size != 0) {
+        if (res.find(size) != res.end()) {
+            res[size]++;
+        } else {
+            res[size] = 1;
+        }
+        size = 0;
+    }
+    return res;
+}
+
 
