@@ -30,7 +30,7 @@
                         <value>com.asvk.samuil.app:WordCount</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Word Count</value>
+                        <value xml:lang="en-US">Specify word count for the generated text.</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -55,7 +55,7 @@
                         <value>com.asvk.samuil.app:WordLength</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Word Length</value>
+                        <value xml:lang="en-US">Specify maximum length of the words in the generated text.</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -80,7 +80,7 @@
                         <value>com.asvk.samuil.app:Alphabet</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Alphabet</value>
+                        <value xml:lang="en-US">Specify the alphabet for the words of the generated text.</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
