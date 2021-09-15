@@ -211,16 +211,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             }
         } else if (aURL.Path == "Statistics") {
             Reference<XTextDocument> text_document(mxFrame->getController()->getModel(), UNO_QUERY);
-            Reference <XText> text = text_document->getText();
-            Reference <XTextRange> textEnd = text->getEnd();
-            rtl::OUString textString = text -> getString();
-            rtl::OUString output = "";
-            auto stat = collectStatistics(textString);
-            for (auto pair: stat) {
-                output = output + rtl::OUString::createFromAscii(std::to_string(pair.first).c_str()) + " " +
-                        rtl::OUString::createFromAscii(std::to_string(pair.second).c_str()) + "\n";
-            }
-            textEnd -> setString(output);
+            createStatisticsTable(text_document);
         }
     }
 }

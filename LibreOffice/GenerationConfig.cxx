@@ -8,14 +8,21 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+
+#include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/XTable.hpp>
+
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::text;
+using namespace com::sun::star::table;
 
 std::map<AlphabetType, std::u16string> myAlphabets {
         std::make_pair(Latin, u"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"),
@@ -84,6 +91,53 @@ std::map<int, int> collectStatistics(rtl::OUString text) {
         size = 0;
     }
     return res;
+}
+
+void createStatisticsTable(Reference<XTextDocument> text_document) {
+    Reference <XText> text = text_document->getText();
+    auto stat = collectStatistics(text -> getString());
+
+    Reference <XTextTable> table = createTable(text_document, stat.size() + 1, 2);
+
+    Reference <XTextRange> text_range = text -> getEnd();
+    Reference <XTextContent> text_content(table, UNO_QUERY);
+    text->insertTextContent(text_range, text_content, (unsigned char) 0);
+
+    fillTable(table, stat);
+};
+
+Reference <XTextTable> createTable(Reference<XTextDocument> text_document, int num_of_row, int num_of_col) {
+    Reference <XMultiServiceFactory> document(text_document, UNO_QUERY);
+    Reference <XTextTable> table(document->createInstance(rtl::OUString::createFromAscii("com.sun.star.text.TextTable")), UNO_QUERY);
+    table -> initialize(num_of_row, num_of_col);
+    return table;
+}
+
+std::string createName(uint32_t column, uint32_t row) {
+    return (char)('A' + column) + std::to_string(row + 1);
+}
+
+void fillTable(Reference <XTextTable> table, std::map<int, int> stat) {
+    Reference<XCell> cell1 = table->getCellByName(rtl::OUString("A1"));
+    Reference<XText> cell_text1(cell1, UNO_QUERY);
+    rtl::OUString cellVal1("Word length");
+    cell_text1 -> setString(cellVal1);
+
+    Reference<XCell> cell2 = table->getCellByName(rtl::OUString("B1"));
+    Reference<XText> cell_text2(cell2, UNO_QUERY);
+    rtl::OUString cellVal2("Count");
+    cell_text2 -> setString(cellVal2);
+
+    for (int x = 0; x < 2; x++) {
+        int y = 1;
+        for (auto pair: stat) {
+            Reference<XCell> cell = table->getCellByName(rtl::OUString::createFromAscii(createName(x, y).c_str()));
+            Reference<XText> cell_text(cell, UNO_QUERY);
+            rtl::OUString cellVal = rtl::OUString::createFromAscii((std::to_string((x == 0) ? pair.first : pair.second)).c_str());
+            cell_text -> setString(cellVal);
+            y++;
+        }
+    }
 }
 
 
