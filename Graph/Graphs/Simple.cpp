@@ -12,7 +12,7 @@ Simple::Simple(set<char> v, set<pair<char, char>> e) {
         vertices.find(edge.second) == vertices.end()) {
             std::ostringstream stream;
             stream << "Cannot add edge with non-existent vertice.";
-            throw std::logic_error(stream.str());
+            throw std::invalid_argument(stream.str());
         } else {
             char first = edge.first > edge.second ? edge.first : edge.second;
             char second = edge.first > edge.second ? edge.second : edge.first;
@@ -55,4 +55,8 @@ void Simple::insideString(ostringstream& stream) const {
     for (auto& e: edges) {
         stream << " " << e.first << e.second;
     }
+}
+
+shared_ptr<Weighted> Simple::asWeighted(double d) {
+     return asWeightedFriend(*this, d);
 }

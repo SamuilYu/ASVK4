@@ -21,7 +21,7 @@ Bipartite::Bipartite(
     set_intersection(v1.begin(), v1.end(), v2.begin(), v2.end(),
                      std::inserter(intersect, intersect.begin()));
     if (!intersect.empty()) {
-        throw logic_error("Upper and lower vertice sets intersect.");
+        throw invalid_argument("Upper and lower vertex sets intersect.");
     }
     upper = v1;
     lower = v2;
@@ -29,20 +29,20 @@ Bipartite::Bipartite(
     vertices = v1;
 
     edges = {};
-    for (auto& edge : e) {
+    for (auto &edge: e) {
         if (vertices.find(edge.first) == vertices.end() ||
             vertices.find(edge.second) == vertices.end()) {
-            throw std::logic_error("Cannot add edge with non-existent vertice.");
-        } else if ((upper.find(edge.first) != upper.end() &&
-                upper.find(edge.second) != upper.end()) ||
-                (lower.find(edge.first) != lower.end() &&
-                lower.find(edge.second) != lower.end())) {
-            throw std::logic_error("Cannot connect vertices from the same parts.");
-        } else {
-            char first = edge.first > edge.second ? edge.first : edge.second;
-            char second = edge.first > edge.second ? edge.second : edge.first;
-            edges.insert({first, second});
+            throw std::invalid_argument("Cannot add edge with non-existent vertex.");
         }
+        if ((upper.find(edge.first) != upper.end() &&
+             upper.find(edge.second) != upper.end()) ||
+            (lower.find(edge.first) != lower.end() &&
+             lower.find(edge.second) != lower.end())) {
+            throw std::invalid_argument("Cannot connect vertices from the same parts.");
+        }
+        char first = edge.first > edge.second ? edge.first : edge.second;
+        char second = edge.first > edge.second ? edge.second : edge.first;
+        edges.insert({first, second});
     }
 }
 

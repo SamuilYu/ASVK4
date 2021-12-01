@@ -20,6 +20,8 @@ public:
     [[nodiscard]] std::string toString() const override;
     [[nodiscard]] std::vector<char> getVertices() const override;
     [[nodiscard]] std::vector<std::pair<char, char>> getEdges() const override;
+    friend shared_ptr<Weighted> asWeightedFriend(const Simple&, double);
+    shared_ptr<Weighted> asWeighted(double d) override;
 
     [[nodiscard]] shared_ptr<TGraph> copy() const override;
 };
