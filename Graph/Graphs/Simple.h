@@ -22,7 +22,6 @@ public:
     [[nodiscard]] std::vector<std::pair<char, char>> getEdges() const override;
 
     [[nodiscard]] shared_ptr<TGraph> copy() const override;
-    virtual ~Simple() = default;
 };
 
 
