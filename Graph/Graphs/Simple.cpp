@@ -36,7 +36,18 @@ std::vector<std::pair<char, char>> Simple::getEdges() const {
 
 std::string Simple::toString() const {
     std::ostringstream stream;
-    stream << "===Simple===" << endl << "Vertices:";
+    stream << "===Simple===" << endl;
+    this->insideString(stream);
+    stream << endl << "============";
+    return stream.str();
+}
+
+shared_ptr<TGraph> Simple::copy() const {
+    return make_shared<Simple>(*this);
+}
+
+void Simple::insideString(ostringstream& stream) const {
+    stream << "Vertices:";
     for (auto& v: vertices) {
         stream << " " << v;
     }
@@ -44,10 +55,4 @@ std::string Simple::toString() const {
     for (auto& e: edges) {
         stream << " " << e.first << e.second;
     }
-    stream << endl << "============";
-    return stream.str();
-}
-
-shared_ptr<TGraph> Simple::copy() const {
-    return make_shared<Simple>(*this);
 }
