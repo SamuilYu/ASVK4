@@ -6,6 +6,9 @@
 using namespace std;
 class Weighted;
 
+template<typename T1, typename T2, typename T3>
+using triple = std::tuple<T1, T2, T3>;
+
 class TGraph {
 public:
     virtual std::string toString() const = 0;

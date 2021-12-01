@@ -10,6 +10,16 @@ private:
 public:
     Bipartite();
     explicit Bipartite(set<char>, set<char>, set<pair<char, char>>);
+    explicit Bipartite(set<char> v) {
+        throw invalid_argument("Does not support these constructor arguments");
+    }
+    explicit Bipartite(set<char> v, set<triple<char, char, double>> e) {
+        throw invalid_argument("Does not support these constructor arguments");
+    }
+
+    explicit Bipartite(set<char> v, set<pair<char, char>> e) {
+        throw invalid_argument("Does not support these constructor arguments");
+    }
     Bipartite(const Bipartite&) = default;
 
     [[nodiscard]] std::string toString() const override;

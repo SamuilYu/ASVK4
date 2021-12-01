@@ -1,10 +1,8 @@
-#include "Graphs/Simple.h"
-#include "Graphs/Complete.h"
-#include "Graphs/Bipartite.h"
-#include "Graphs/Weighted.h"
+#include "Graphs/GraphFactory.h"
 #include "iostream"
 
 int main() {
-    auto g = Complete({'A', 'B', 'C', 'D', 'E'}).copy();
-    std::cout << g ->asWeighted(1.2) -> toString();
+    auto gf = GraphFactory();
+    auto g = gf.create("complete", {'A', 'B', 'C', 'D', 'E'}, {{'A', 'B'}});
+    std::cout << g -> asWeighted(1.2) -> toString();
 }

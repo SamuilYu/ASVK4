@@ -5,6 +5,7 @@
 #include <vector>
 #include <set>
 #include <memory>
+#include "stdexcept"
 using namespace std;
 
 class Simple: public TGraph {
@@ -15,6 +16,14 @@ protected:
 public:
     Simple();
     explicit Simple(set<char>, set<pair<char, char>>);
+    explicit Simple(set<char> v) { vertices = v; }
+    explicit Simple(set<char> v, set<triple<char, char, double>> e) {
+        throw invalid_argument("Does not support these constructor arguments");
+    }
+    explicit Simple(set<char>, set<char>, set<pair<char, char>>) {
+        throw invalid_argument("Does not support these constructor arguments");
+    }
+
     Simple(const Simple&) = default;
 
     [[nodiscard]] std::string toString() const override;
