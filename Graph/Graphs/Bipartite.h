@@ -36,6 +36,31 @@ public:
         return Bipartite(newUpper, newLower, newEdges);
     }
 
+    Bipartite operator-(const Bipartite& other) {
+        decltype(upper) newUpper;
+        decltype(lower) newLower;
+        decltype(edges) newEdges;
+        for (auto& vertex: this->upper) {
+            if (other.upper.find(vertex) == other.upper.end()) {
+                newUpper.insert(vertex);
+            }
+        }
+        for (auto& vertex: this->lower) {
+            if (other.lower.find(vertex) == other.lower.end()) {
+                newLower.insert(vertex);
+            }
+        }
+        for (auto& edge: this->edges) {
+            if (((newUpper.find(edge.first) != newUpper.end()
+                && newLower.find(edge.second) != newLower.end())
+                || (newLower.find(edge.first) != newLower.end()
+                && newUpper.find(edge.second) != newUpper.end()))
+                && other.edges.find(edge) == other.edges.end()) {
+                newEdges.insert(edge);
+            }
+        }
+        return Bipartite(newUpper, newLower, newEdges);
+    }
 };
 
 

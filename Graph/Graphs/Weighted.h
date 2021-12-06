@@ -2,6 +2,7 @@
 #define GRAPHS_WEIGHTED_H
 #include "tuple"
 #include "map"
+#include "algorithm"
 #include "Simple.h"
 
 
@@ -39,6 +40,27 @@ public:
         auto newWeights = this->weights;
         newVertices.insert(other.vertices.begin(), other.vertices.end());
         newWeights.insert(other.weights.begin(), other.weights.end());
+        return Weighted(newVertices, toTripleSet(newWeights));
+    }
+
+    Weighted operator-(const Simple& other) {
+        decltype(vertices) newVertices;
+        decltype(weights) newWeights = {};
+        auto otherEdges = other.getEdges();
+        auto otherVertices = other.getVertices();
+        decltype(vertices) verticesSet = {otherVertices.begin(), otherVertices.end()};
+        for (auto& vertex: this->vertices) {
+            if (verticesSet.find(vertex) == verticesSet.end()) {
+                newVertices.insert(vertex);
+            }
+        }
+        for (auto weight: this->weights) {
+            if (newVertices.find(weight.first.first) != newVertices.end()
+                && newVertices.find(weight.first.second) != newVertices.end()
+                && std::find(otherEdges.begin(), otherEdges.end(), weight.first) == otherEdges.end()) {
+                newWeights.insert(weight);
+            }
+        }
         return Weighted(newVertices, toTripleSet(newWeights));
     }
 };

@@ -11,7 +11,7 @@ Simple::Simple(set<char> v, set<pair<char, char>> e) {
         if (vertices.find(edge.first) == vertices.end() ||
         vertices.find(edge.second) == vertices.end()) {
             std::ostringstream stream;
-            stream << "Cannot add edge with non-existent vertice.";
+            stream << "Cannot add edge with non-existent vertex.";
             throw std::invalid_argument(stream.str());
         } else {
             char first = edge.first > edge.second ? edge.first : edge.second;

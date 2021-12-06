@@ -6,6 +6,8 @@
 #include <set>
 #include <memory>
 #include "stdexcept"
+#include "algorithm"
+#include "iostream"
 using namespace std;
 
 class Simple: public TGraph {
@@ -41,6 +43,26 @@ public:
         newEdges.insert(other.edges.begin(), other.edges.end());
         return Simple(newVertices, newEdges);
     }
+
+    Simple operator-(const Simple& other) {
+        decltype(vertices) newVertices = {};
+        decltype(edges) newEdges = {};
+
+        for (auto& vertex: this->vertices) {
+            if (other.vertices.find(vertex) == other.vertices.end()) {
+                newVertices.insert(vertex);
+            }
+        }
+        for (auto& edge: this->edges) {
+            if (newVertices.find(edge.first) != newVertices.end()
+            && newVertices.find(edge.second) != newVertices.end()
+            && other.edges.find(edge) == other.edges.end()) {
+                newEdges.insert(edge);
+            }
+        }
+        return Simple(newVertices, newEdges);
+    }
+
 };
 
 
