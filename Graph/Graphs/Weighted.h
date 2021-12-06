@@ -9,6 +9,13 @@ class Weighted: public Simple {
 private:
     std::map<std::pair<char, char>, double> weights;
     void insideString(ostringstream &) const override;
+    set<triple<char, char, double>> toTripleSet(map<pair<char, char>, double> map1) {
+        set<triple<char, char, double>> set1 = {};
+        for (auto pair: map1) {
+            set1.insert({pair.first.first, pair.first.second, pair.second});
+        }
+        return set1;
+    }
 public:
     Weighted();
     explicit Weighted(set<char>, set<triple<char, char, double>>);
@@ -26,6 +33,14 @@ public:
     [[nodiscard]] std::string toString() const override;
 
     [[nodiscard]] shared_ptr<TGraph> copy() const override;
+
+    Weighted operator+(const Weighted& other) {
+        auto newVertices = this->vertices;
+        auto newWeights = this->weights;
+        newVertices.insert(other.vertices.begin(), other.vertices.end());
+        newWeights.insert(other.weights.begin(), other.weights.end());
+        return Weighted(newVertices, toTripleSet(newWeights));
+    }
 };
 
 

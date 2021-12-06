@@ -20,6 +20,12 @@ public:
     [[nodiscard]] std::string toString() const override;
 
     [[nodiscard]] shared_ptr<TGraph> copy() const override;
+
+    Complete operator+(const Complete& other) {
+        auto newVertices = this->vertices;
+        newVertices.insert(other.vertices.begin(), other.vertices.end());
+        return Complete(newVertices);
+    }
 };
 
 

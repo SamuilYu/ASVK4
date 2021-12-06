@@ -26,6 +26,16 @@ public:
 
     [[nodiscard]] shared_ptr<TGraph> copy() const override;
 
+    Bipartite operator+(const Bipartite& other) {
+        auto newUpper = this->upper;
+        auto newLower = this->lower;
+        auto newEdges = this->edges;
+        newUpper.insert(other.upper.begin(), other.upper.end());
+        newLower.insert(other.lower.begin(), other.lower.end());
+        newEdges.insert(other.edges.begin(), other.edges.end());
+        return Bipartite(newUpper, newLower, newEdges);
+    }
+
 };
 
 
