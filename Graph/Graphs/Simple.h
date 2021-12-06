@@ -33,6 +33,14 @@ public:
     shared_ptr<Weighted> asWeighted(double d) override;
 
     [[nodiscard]] shared_ptr<TGraph> copy() const override;
+
+    Simple operator+(const Simple& other) {
+        auto newVertices = this->vertices;
+        auto newEdges = this->edges;
+        newVertices.insert(other.vertices.begin(), other.vertices.end());
+        newEdges.insert(other.edges.begin(), other.edges.end());
+        return Simple(newVertices, newEdges);
+    }
 };
 
 

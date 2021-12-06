@@ -28,8 +28,17 @@ shared_ptr<TGraph> operator+(A first, B second) {
     if (auto f = dynamic_pointer_cast<Weighted>(first)) {
         if (auto s = dynamic_pointer_cast<Weighted>(second)) {
             return make_shared<Weighted>(*f + *s);
+        } else {
+            throw logic_error("Cannot sum weighted with non-weighted");
+        }
+    } else {
+        if (dynamic_pointer_cast<Weighted>(second)) {
+            throw logic_error("Cannot sum weighted with non-weighted");
         }
     }
+    auto firstTerm = dynamic_pointer_cast<Simple>(first);
+    auto secondTerm = dynamic_pointer_cast<Simple>(second);
+    return make_shared<Simple>(*firstTerm + *secondTerm);
 }
 
 #endif //GRAPHS_NEWOPERATORS_H
