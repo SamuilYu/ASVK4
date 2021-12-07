@@ -20,7 +20,7 @@ shared_ptr<TGraph> operator-(const A&, const B&) {
 
 template <class A, class B,
         enable_if_t<is_base_of_v<shared_ptr<TGraph>, A>
-                && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
+        && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
 shared_ptr<TGraph> operator+(A first, B second) {
     if (auto f = dynamic_pointer_cast<Bipartite>(first)) {
         if (auto s = dynamic_pointer_cast<Bipartite>(second)) {
@@ -51,7 +51,7 @@ shared_ptr<TGraph> operator+(A first, B second) {
 
 template <class A, class B,
         enable_if_t<is_base_of_v<shared_ptr<TGraph>, A>
-                    && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
+        && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
 shared_ptr<TGraph> operator-(A first, B second) {
     if (auto f = dynamic_pointer_cast<Bipartite>(first)) {
         if (auto s = dynamic_pointer_cast<Bipartite>(second)) {
@@ -74,7 +74,7 @@ shared_ptr<TGraph> operator-(A first, B second) {
 
 template <class A, class B,
         enable_if_t<is_base_of_v<shared_ptr<TGraph>, A>
-                    && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
+        && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
 shared_ptr<TGraph> operator+=(A& first, B second) {
     first = first + second;
     return first;
@@ -82,7 +82,7 @@ shared_ptr<TGraph> operator+=(A& first, B second) {
 
 template <class A, class B,
         enable_if_t<is_base_of_v<shared_ptr<TGraph>, A>
-                    && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
+        && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
 shared_ptr<TGraph> operator-=(A& first, B second) {
     first = first - second;
     return first;

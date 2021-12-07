@@ -36,6 +36,8 @@ public:
 
     [[nodiscard]] shared_ptr<TGraph> copy() const override;
 
+    vector<char> shortestPath(char i, char i1) override;
+
     Simple operator+(const Simple& other) {
         auto newVertices = this->vertices;
         auto newEdges = this->edges;

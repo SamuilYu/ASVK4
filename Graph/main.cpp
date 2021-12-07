@@ -4,15 +4,19 @@
 
 int main() {
     auto gf = GraphFactory();
-    auto w = gf.create("weighted", {'A', 'B', 'X', 'Y'},
-                       {{'A', 'B', 1.23}, {'A', 'X', 5.53}, {'X', 'Y', 1.13}});
-    auto g = gf.create("bipartite",{'A', 'B', 'C'}, {'E', 'D'},
-                       {{'A', 'E'}, {'B', 'E'}, {'C', 'D'}});
-    auto h = gf.create("bipartite",{'A', 'X', 'Y'}, {'N', 'D'},
-                       {{'A', 'N'}, {'N', 'X'}, {'X', 'D'}});
+    auto w = gf.create("weighted", {'A', 'C', 'D', 'E', 'M', 'Z'},
+                       {{'A', 'C', 1.0}, {'A', 'E', 1.0}, {'A', 'D', 2.0},
+                        {'A', 'Z', 5.0}, {'C', 'M', 2.0}, {'M', 'Z', 1.0},
+                        {'D', 'Z', 2.0}, {'E', 'Z', 3.0}, {'E', 'M', 1.0}});
+//    auto g = gf.create("bipartite",{'A', 'B', 'C'}, {'E', 'D'},
+//                       {{'A', 'E'}, {'B', 'E'}, {'C', 'D'}});
+//    auto h = gf.create("bipartite",{'A', 'X', 'Y'}, {'N', 'D'},
+//                       {{'A', 'N'}, {'N', 'X'}, {'X', 'D'}});
 //    auto g = gf.create("complete",{'A', 'B', 'C', 'F', 'H'});
 //    auto h = gf.create("complete",{'A', 'B', 'E'});
-    std::cout << g->toString() << endl << h->toString() << endl;
-    g += h;
-    std::cout << g->toString() << endl;
+    std::cout << w->toString() << endl;
+    auto path = w->shortestPath('A', 'Z');
+    for (auto node: path) {
+        std::cout << node;
+    }
 }

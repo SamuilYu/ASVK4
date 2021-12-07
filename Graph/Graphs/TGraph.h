@@ -15,6 +15,7 @@ public:
     virtual std::vector<char> getVertices() const = 0;
     virtual std::vector<std::pair<char, char>> getEdges() const = 0;
     virtual shared_ptr<Weighted> asWeighted(double) = 0;
+    virtual vector<char> shortestPath(char, char) = 0;
 
     virtual shared_ptr<TGraph> copy() const = 0;
 };

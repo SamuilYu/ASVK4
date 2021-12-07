@@ -17,6 +17,8 @@ private:
         }
         return set1;
     }
+    set<char> getNeighbors(char);
+    static char getUnvisitedMinimum(map<char, pair<double, vector<char>>> map1, set<char> set1);
 public:
     Weighted();
     explicit Weighted(set<char>, set<triple<char, char, double>>);
@@ -34,6 +36,8 @@ public:
     [[nodiscard]] std::string toString() const override;
 
     [[nodiscard]] shared_ptr<TGraph> copy() const override;
+
+    vector<char> shortestPath(char, char) override;
 
     Weighted operator+(const Weighted& other) {
         auto newVertices = this->vertices;

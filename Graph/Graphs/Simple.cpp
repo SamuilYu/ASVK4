@@ -60,3 +60,7 @@ void Simple::insideString(ostringstream& stream) const {
 shared_ptr<Weighted> Simple::asWeighted(double d) {
      return asWeightedFriend(*this, d);
 }
+
+vector<char> Simple::shortestPath(char i, char i1) {
+    throw logic_error("Cannot find shortest path in un-weighted graph");
+}
