@@ -72,4 +72,19 @@ shared_ptr<TGraph> operator-(A first, B second) {
     return make_shared<Simple>(*firstTerm - *secondTerm);
 }
 
+template <class A, class B,
+        enable_if_t<is_base_of_v<shared_ptr<TGraph>, A>
+                    && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
+shared_ptr<TGraph> operator+=(A& first, B second) {
+    first = first + second;
+    return first;
+}
+
+template <class A, class B,
+        enable_if_t<is_base_of_v<shared_ptr<TGraph>, A>
+                    && is_base_of_v<shared_ptr<TGraph>, B>, bool> = true>
+shared_ptr<TGraph> operator-=(A& first, B second) {
+    first = first - second;
+    return first;
+}
 #endif //GRAPHS_NEWOPERATORS_H
