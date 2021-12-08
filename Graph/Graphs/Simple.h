@@ -22,15 +22,15 @@ public:
     explicit Simple(set<char> v, set<triple<char, char, double>> e) {
         throw invalid_argument("Does not support these constructor arguments");
     }
-    explicit Simple(set<char>, set<char>, set<pair<char, char>>) {
+    explicit Simple(set<char>, set<char>) {
         throw invalid_argument("Does not support these constructor arguments");
     }
 
     Simple(const Simple&) = default;
 
     [[nodiscard]] std::string toString() const override;
-    [[nodiscard]] std::vector<char> getVertices() const override;
-    [[nodiscard]] std::vector<std::pair<char, char>> getEdges() const override;
+    [[nodiscard]] set<char> getVertices() const override;
+    [[nodiscard]] set<pair<char, char>> getEdges() const override;
     friend shared_ptr<Weighted> asWeightedFriend(const Simple&, double);
     shared_ptr<Weighted> asWeighted(double d) override;
 

@@ -12,7 +12,7 @@ public:
     explicit Complete(set<char>, set<pair<char, char>>) {
         throw invalid_argument("Does not support these constructor arguments");
     }
-    explicit Complete(set<char>, set<char>, set<pair<char, char>>) {
+    explicit Complete(set<char>, set<char>) {
         throw invalid_argument("Does not support these constructor arguments");
     }
     Complete(const Complete&) = default;

@@ -26,12 +26,12 @@ Simple::Simple() {
     edges = {};
 }
 
-std::vector<char> Simple::getVertices() const {
-    return {vertices.begin(), vertices.end()};
+set<char> Simple::getVertices() const {
+    return vertices;
 }
 
-std::vector<std::pair<char, char>> Simple::getEdges() const {
-    return {edges.begin(), edges.end()};
+set<pair<char, char>> Simple::getEdges() const {
+    return edges;
 }
 
 std::string Simple::toString() const {

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "set"
 using namespace std;
 class Weighted;
 
@@ -12,8 +13,8 @@ using triple = std::tuple<T1, T2, T3>;
 class TGraph {
 public:
     virtual std::string toString() const = 0;
-    virtual std::vector<char> getVertices() const = 0;
-    virtual std::vector<std::pair<char, char>> getEdges() const = 0;
+    virtual std::set<char> getVertices() const = 0;
+    virtual std::set<std::pair<char, char>> getEdges() const = 0;
     virtual shared_ptr<Weighted> asWeighted(double) = 0;
     virtual vector<char> shortestPath(char, char) = 0;
 

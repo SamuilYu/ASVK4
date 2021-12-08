@@ -9,7 +9,7 @@ private:
     void insideString(ostringstream &) const override;
 public:
     Bipartite();
-    explicit Bipartite(set<char>, set<char>, set<pair<char, char>>);
+    explicit Bipartite(set<char>, set<char>);
     explicit Bipartite(set<char> v) {
         throw invalid_argument("Does not support these constructor arguments");
     }
@@ -29,11 +29,9 @@ public:
     Bipartite operator+(const Bipartite& other) {
         auto newUpper = this->upper;
         auto newLower = this->lower;
-        auto newEdges = this->edges;
         newUpper.insert(other.upper.begin(), other.upper.end());
         newLower.insert(other.lower.begin(), other.lower.end());
-        newEdges.insert(other.edges.begin(), other.edges.end());
-        return Bipartite(newUpper, newLower, newEdges);
+        return Bipartite(newUpper, newLower);
     }
 
     Bipartite operator-(const Bipartite& other) {
@@ -50,16 +48,7 @@ public:
                 newLower.insert(vertex);
             }
         }
-        for (auto& edge: this->edges) {
-            if (((newUpper.find(edge.first) != newUpper.end()
-                && newLower.find(edge.second) != newLower.end())
-                || (newLower.find(edge.first) != newLower.end()
-                && newUpper.find(edge.second) != newUpper.end()))
-                && other.edges.find(edge) == other.edges.end()) {
-                newEdges.insert(edge);
-            }
-        }
-        return Bipartite(newUpper, newLower, newEdges);
+        return Bipartite(newUpper, newLower);
     }
 };
 

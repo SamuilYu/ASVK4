@@ -21,7 +21,7 @@ private:
     public:
         virtual shared_ptr<TGraph> create(vertices) = 0;
         virtual shared_ptr<TGraph> create(vertices, edges) = 0;
-        virtual shared_ptr<TGraph> create(vertices, vertices, edges) = 0;
+        virtual shared_ptr<TGraph> create(vertices, vertices) = 0;
         virtual shared_ptr<TGraph> create(vertices, weightedEdges) = 0;
         virtual shared_ptr<TGraph> create() = 0;
     };
@@ -41,8 +41,8 @@ private:
             return make_shared<T>(T(v, e));
         }
 
-        shared_ptr<TGraph> create(vertices v1, vertices v2, edges e) override {
-            return make_shared<T>(T(v1, v2, e));
+        shared_ptr<TGraph> create(vertices v1, vertices v2) override {
+            return make_shared<T>(T(v1, v2));
         }
 
         shared_ptr<TGraph> create(vertices v, weightedEdges e) override {
@@ -76,8 +76,8 @@ public:
         return registered[type]->create(v, e);
     }
 
-    shared_ptr<TGraph> create(const string& type, vertices v1, vertices v2, edges e) {
-        return registered[type]->create(v1, v2, e);
+    shared_ptr<TGraph> create(const string& type, vertices v1, vertices v2) {
+        return registered[type]->create(v1, v2);
     }
 
     shared_ptr<TGraph> create(const string& type, vertices v, weightedEdges e) {

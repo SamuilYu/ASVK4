@@ -13,10 +13,7 @@ Bipartite::Bipartite(): Simple() {
     lower = {};
 }
 
-Bipartite::Bipartite(
-        set<char> v1,
-        set<char> v2,
-        set<pair<char, char>> e) {
+Bipartite::Bipartite(set<char> v1, set<char> v2) {
     std::set<char> intersect;
     set_intersection(v1.begin(), v1.end(), v2.begin(), v2.end(),
                      std::inserter(intersect, intersect.begin()));
@@ -29,20 +26,12 @@ Bipartite::Bipartite(
     vertices = v1;
 
     edges = {};
-    for (auto &edge: e) {
-        if (vertices.find(edge.first) == vertices.end() ||
-            vertices.find(edge.second) == vertices.end()) {
-            throw std::invalid_argument("Cannot add edge with non-existent vertex.");
+    for (auto& vv1: upper) {
+        for (auto &vv2: lower) {
+            char first = vv1 > vv2 ? vv1 : vv2;
+            char second = vv1 > vv2 ? vv2 : vv1;
+            edges.insert({first, second});
         }
-        if ((upper.find(edge.first) != upper.end() &&
-             upper.find(edge.second) != upper.end()) ||
-            (lower.find(edge.first) != lower.end() &&
-             lower.find(edge.second) != lower.end())) {
-            throw std::invalid_argument("Cannot connect vertices from the same parts.");
-        }
-        char first = edge.first > edge.second ? edge.first : edge.second;
-        char second = edge.first > edge.second ? edge.second : edge.first;
-        edges.insert({first, second});
     }
 }
 
