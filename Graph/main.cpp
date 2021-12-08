@@ -8,12 +8,12 @@ int main() {
                        {{'A', 'C', 1.0}, {'A', 'E', 1.0}, {'A', 'D', 2.0},
                         {'A', 'Z', 5.0}, {'C', 'M', 2.0}, {'M', 'Z', 1.0},
                         {'D', 'Z', 2.0}, {'E', 'Z', 3.0}, {'E', 'M', 1.0}});
-//    auto g = gf.create("bipartite",{'A', 'B', 'C'}, {'E', 'D'},
-//                       {{'A', 'E'}, {'B', 'E'}, {'C', 'D'}});
+    auto g = gf.create("bipartite",{'A', 'B', 'C'}, set<char>{'E', 'D'});
 //    auto h = gf.create("bipartite",{'A', 'X', 'Y'}, {'N', 'D'},
 //                       {{'A', 'N'}, {'N', 'X'}, {'X', 'D'}});
 //    auto g = gf.create("complete",{'A', 'B', 'C', 'F', 'H'});
 //    auto h = gf.create("complete",{'A', 'B', 'E'});
+    g+w;
     std::cout << w->toString() << endl;
     auto path = w->shortestPath('A', 'Z');
     for (auto node: path) {
