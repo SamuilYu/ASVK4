@@ -138,7 +138,7 @@ char Weighted::getUnvisitedMinimum(map<char, pair<double, vector<char>>> map1, s
         if (set1.find(each.first) == set1.end()) {
             continue;
         }
-        if (each.second.first < minimum) {
+        if (each.second.first <= minimum) {
             minimum = each.second.first;
             minimumNode = each.first;
         }
