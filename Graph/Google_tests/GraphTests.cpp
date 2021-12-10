@@ -83,8 +83,7 @@ TEST_F(GraphTests, Weighted) {
 
 TEST_F(GraphTests, Exceptions) {
     EXPECT_ANY_THROW(factory.create("simple", {'A', 'B', 'C', 'D'},{{'A', 'E'}, {'A', 'B'}}));
-    EXPECT_ANY_THROW(factory.create("simple", {'A', 'B', 'C', 'D'},{{'A', 'C', 1.0}, {'A', 'B', 1.2}}));
-    set<char> lower = {'E', 'F'};
-    EXPECT_ANY_THROW(factory.create("simple", {'A', 'B', 'C', 'D'},lower));
+    EXPECT_EQ(factory.create("simple", {'A', 'B', 'C', 'D'},{{'A', 'C', 1.0}, {'A', 'B', 1.2}}), nullptr);
+    EXPECT_EQ(factory.create("simple", {'A', 'B', 'C', 'D'}, set<char>{'E', 'F'}), nullptr);
 
 }

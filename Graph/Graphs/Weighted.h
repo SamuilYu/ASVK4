@@ -24,13 +24,6 @@ public:
     explicit Weighted(set<char>, set<triple<char, char, double>>);
     explicit Weighted(set<char>, set<std::pair<char, char>>, double);
     Weighted(const Weighted&) = default;
-
-    explicit Weighted(set<char> v, set<pair<char, char>> e) {
-        Weighted(v, e, 1.0);
-    }
-    explicit Weighted(set<char>, set<char>) {
-        throw invalid_argument("Does not support these constructor arguments");
-    }
     explicit Weighted(set<char> v) { vertices = v; }
 
     [[nodiscard]] std::string toString() const override;

@@ -6,15 +6,6 @@ class Complete: public Simple {
 public:
     Complete();
     explicit Complete(set<char>);
-    explicit Complete(set<char> v, set<triple<char, char, double>> e) {
-        throw invalid_argument("Does not support these constructor arguments");
-    }
-    explicit Complete(set<char>, set<pair<char, char>>) {
-        throw invalid_argument("Does not support these constructor arguments");
-    }
-    explicit Complete(set<char>, set<char>) {
-        throw invalid_argument("Does not support these constructor arguments");
-    }
     Complete(const Complete&) = default;
 
     [[nodiscard]] std::string toString() const override;

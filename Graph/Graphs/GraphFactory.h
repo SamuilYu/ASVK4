@@ -27,26 +27,42 @@ private:
     };
 
     template<class T>
-    class Creator: public ICreator {
+    class Creator: public ICreator{
     public:
         shared_ptr<TGraph> create(vertices v) override {
-            return make_shared<T>(T(v));
+            if constexpr(is_constructible_v<T, vertices>) {
+                return make_shared<T>(T(v));
+            }
+            return nullptr;
         }
 
         shared_ptr<TGraph> create() override {
-            return make_shared<T>(T());
+            if constexpr (is_constructible_v<T>) {
+                return make_shared<T>(T());
+            }
+            return nullptr;
+
         }
 
         shared_ptr<TGraph> create(vertices v, edges e) override {
-            return make_shared<T>(T(v, e));
+            if constexpr (is_constructible_v<T, vertices, edges>) {
+                return make_shared<T>(T(v, e));
+            }
+            return nullptr;
         }
 
         shared_ptr<TGraph> create(vertices v1, vertices v2) override {
-            return make_shared<T>(T(v1, v2));
+            if constexpr (is_constructible_v<T, vertices, vertices>) {
+                return make_shared<T>(T(v1, v2));
+            }
+            return nullptr;
         }
 
         shared_ptr<TGraph> create(vertices v, weightedEdges e) override {
-            return make_shared<T>(T(v, e));
+            if constexpr (is_constructible_v<T, vertices, weightedEdges>) {
+                return make_shared<T>(T(v, e));
+            }
+            return nullptr;
         }
     };
 
